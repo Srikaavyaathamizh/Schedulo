@@ -1,6 +1,7 @@
 # SCHEDULO – Course Scheduling & Timetable Generator
 
 ## Aim
+
 To develop a web-based application that allows students and staff to input course details and automatically generate a weekly college-style timetable, mapping courses to days and time slots efficiently.
 
 ## Summary
@@ -16,17 +17,17 @@ Offers a user-friendly interface for adding, viewing, and managing course data.
 
 ## Features
 
-Dynamic course row addition for multiple courses
+1.Dynamic course row addition for multiple courses
 
-Automatic placement of courses in weekly timetable based on day and time
+2.Automatic placement of courses in weekly timetable based on day and time
 
-Displays course name, staff, and slot only (ignores categories)
+3.Displays course name, staff, and slot only (ignores categories)
 
-Separate input section for adding courses
+4.Separate input section for adding courses
 
-Maintains a constant timetable structure regardless of input
+5.Maintains a constant timetable structure regardless of input
 
-Easy-to-read weekly timetable for students
+6.Easy-to-read weekly timetable for students
 
 ## Technologies Used
 
@@ -35,19 +36,19 @@ Frontend: HTML, CSS, JavaScript
 
 ## System Workflow
 
-User Registration/Login (optional for multi-user version)
+1.User Registration/Login (optional for multi-user version)
 
-Input course details: name, staff, slot, day, time, credits
+2.Input course details: name, staff, slot, day, time, credits
 
-Add multiple courses dynamically
+3.Add multiple courses dynamically
 
-Click “Create Timetable”
+4.Click “Create Timetable”
 
-System automatically fills the weekly timetable grid according to day & time
+5.System automatically fills the weekly timetable grid according to day & time
 
-Timetable displays course name, staff, and slot in the correct cell
+6.Timetable displays course name, staff, and slot in the correct cell
 
-Optionally, save timetable or edit courses
+7.Optionally, save timetable or edit courses
 
 ## Result
 SCHEDULO generates a structured, easy-to-read weekly timetable based on user-input course details, simplifying course planning and ensuring no conflicts in day and time slots.
