@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schedulo - Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="login-box">
+      <h1 class="logo">SCHEDULO</h1>
+      
+      <!-- ✅ Login FORM -->
+      <form id="login-form">
+        <div class="input-group">
+          <i class="fas fa-user icon"></i>
+          <input type="text" id="login-username" placeholder="Email or username">
+        </div>
+        <div class="input-group">
+          <i class="fas fa-eye-slash icon"></i>
+          <input type="password" id="login-password" placeholder="Password">
+        </div>
+        <button type="submit" class="signup-btn">LOGIN</button>
+      </form>
+
+      <p class="login-text">
+        Don't have an account? <a href="index.html">Sign up</a>
+      </p>
+
+      <div class="social-btn google-btn">
+        <img src="https://img.icons8.com/color/48/000000/google-logo.png"/>
+        Continue with Google
+      </div>
+
+      <div class="social-btn fb-btn">
+        <img src="https://img.icons8.com/color/48/000000/facebook.png"/>
+        Continue with Facebook
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ JS FUNCTIONALITY -->
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const loginUsername = document.getElementById("login-username").value.trim();
+      const loginPassword = document.getElementById("login-password").value.trim();
+
+      const storedUsername = localStorage.getItem("username");
+      const storedPassword = localStorage.getItem("password");
+
+      if (loginUsername === storedUsername && loginPassword === storedPassword) {
+        // Redirect to your home/dashboard page
+        window.location.href = "dashboard.html";
+      }
+    });
+  </script>
+</body>
+</html>

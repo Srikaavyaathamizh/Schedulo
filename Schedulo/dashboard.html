@@ -1,0 +1,1173 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schedulo - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 40px;
+    }
+    .dashboard {
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+    h1 { color: #333; margin-bottom: 10px; }
+    p { color: #666; margin-bottom: 30px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    th { background-color: #f5f5f5; }
+    .category-title {
+      background-color: #d9edf7;
+      font-weight: bold;
+      text-align: left;
+      padding: 10px;
+      color: #31708f;
+      margin-top: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .btn {
+      margin: 5px;
+      padding: 8px 15px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .add-btn { background-color: #4CAF50; color: white; }
+    .add-btn:hover { background-color: #3e8e41; }
+    .logout-btn { background-color: #ff4d4d; color: white; }
+    .logout-btn:hover { background-color: #e60000; }
+    .create-btn { background-color: #2196F3; color: white; }
+    .create-btn:hover { background-color: #0b7dda; }
+    #timetable-output {
+      margin-top: 40px;
+      text-align: left;
+    }
+    #timetable-output table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #timetable-output h2 {
+      margin-top: 30px;
+      color: #31708f;
+    }
+    #timetable-output th, #timetable-output td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      vertical-align: top;
+      text-align: center;
+    }
+    .credit-summary {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      text-align: left;
+    }
+    .credit-summary h3 {
+      margin-top: 0;
+      color: #31708f;
+    }
+    .conflict-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      max-width: 500px;
+      width: 90%;
+    }
+    .conflict-dialog h3 {
+      margin-top: 0;
+      color: #ff4d4d;
+    }
+    .conflict-option {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .conflict-option:hover {
+      background: #e0e0e0;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+    select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    .half-slot {
+      height: 50%;
+      border-bottom: 1px dashed #ccc;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .half-slot:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>Welcome to SCHEDULO!</h1>
+    <p id="user-info">You have successfully logged in.</p>
+
+    <!-- Professional Core Section -->
+    <div class="category-title">Professional Core</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="core-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Data Structures"></td>
+          <td><input type="text" placeholder="e.g., A1"></td>
+          <td><input type="text" placeholder="e.g., Prof. Kumar"></td>
+          <td><input type="number" placeholder="e.g., 4" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('core-body')">➕ Add Professional Core</button>
+
+    <!-- Professional Elective Section -->
+    <div class="category-title">Professional Elective</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="pro-elective-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Machine Learning"></td>
+          <td><input type="text" placeholder="e.g., B1"></td>
+          <td><input type="text" placeholder="e.g., Prof. Sharma"></td>
+          <td><input type="number" placeholder="e.g., 3" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('pro-elective-body')">➕ Add Professional Elective</button>
+
+    <!-- Open Elective Section -->
+    <div class="category-title">Open Elective</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="open-elective-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Cyber Law"></td>
+          <td><input type="text" placeholder="e.g., F2"></td>
+          <td><input type="text" placeholder="e.g., Prof. Meera"></td>
+          <td><input type="number" placeholder="e.g., 3" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('open-elective-body')">➕ Add Open Elective</button>
+
+    <!-- Humanities and Science Section -->
+    <div class="category-title">Humanities and Science</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="humanities-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Economics"></td>
+          <td><input type="text" placeholder="e.g., H1"></td>
+          <td><input type="text" placeholder="e.g., Prof. Gupta"></td>
+          <td><input type="number" placeholder="e.g., 2" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('humanities-body')">➕ Add Humanities and Science</button>
+
+    <!-- Employability Enhancement Courses Section -->
+    <div class="category-title">Employability Enhancement Courses</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="employability-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Communication Skills"></td>
+          <td><input type="text" placeholder="e.g., E1"></td>
+          <td><input type="text" placeholder="e.g., Prof. Reddy"></td>
+          <td><input type="number" placeholder="e.g., 2" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('employability-body')">➕ Add Employability Course</button>
+
+    <!-- Basic Science Section -->
+    <div class="category-title">Basic Science</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="basic-science-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Physics"></td>
+          <td><input type="text" placeholder="e.g., S1"></td>
+          <td><input type="text" placeholder="e.g., Prof. Patel"></td>
+          <td><input type="number" placeholder="e.g., 3" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('basic-science-body')">➕ Add Basic Science</button>
+
+    <!-- Engineering Science Section -->
+    <div class="category-title">Engineering Science</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Slot</th>
+          <th>Staff Name</th>
+          <th>Credit</th>
+          <th>Day 1</th>
+          <th>Time 1</th>
+          <th>Day 2</th>
+          <th>Time 2</th>
+        </tr>
+      </thead>
+      <tbody id="engineering-science-body">
+        <tr>
+          <td><input type="text" placeholder="e.g., Engineering Mechanics"></td>
+          <td><input type="text" placeholder="e.g., ES1"></td>
+          <td><input type="text" placeholder="e.g., Prof. Joshi"></td>
+          <td><input type="number" placeholder="e.g., 4" onchange="updateCreditSummary()"></td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+          <td>
+            <select>
+              <option value="">Select Day</option>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+            </select>
+          </td>
+          <td>
+            <select class="time-select">
+              <option value="">Select Time</option>
+              <option>8AM-10AM</option>
+              <option>10AM-12PM</option>
+              <option>1PM-3PM</option>
+              <option>3PM-5PM</option>
+              <option>8AM-9AM</option>
+              <option>9AM-10AM</option>
+              <option>10AM-11AM</option>
+              <option>11AM-12PM</option>
+              <option>1PM-2PM</option>
+              <option>2PM-3PM</option>
+              <option>3PM-4PM</option>
+              <option>4PM-5PM</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn add-btn" onclick="addCourseRow('engineering-science-body')">➕ Add Engineering Science</button>
+
+    <button class="btn create-btn" onclick="createTimetable()">✅ Create Timetable</button>
+    <button class="btn logout-btn" onclick="logout()">Logout</button>
+
+    <div id="credit-summary-display" class="credit-summary">
+      <h3>Credit Summary</h3>
+      <ul>
+        <li><strong>Professional Core:</strong> <span id="core-credits">0</span> credits</li>
+        <li><strong>Professional Elective:</strong> <span id="pro-elective-credits">0</span> credits</li>
+        <li><strong>Open Elective:</strong> <span id="open-elective-credits">0</span> credits</li>
+        <li><strong>Humanities and Science:</strong> <span id="humanities-credits">0</span> credits</li>
+        <li><strong>Employability Enhancement Courses:</strong> <span id="employability-credits">0</span> credits</li>
+        <li><strong>Basic Science:</strong> <span id="basic-science-credits">0</span> credits</li>
+        <li><strong>Engineering Science:</strong> <span id="engineering-science-credits">0</span> credits</li>
+        <li><strong>Total Credits:</strong> <span id="total-credits">0</span></li>
+      </ul>
+    </div>
+
+    <div id="timetable-output"></div>
+  </div>
+
+  <script>
+    const username = localStorage.getItem("scheduloUsername");
+    if (!username) {
+      alert("Please log in first.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("user-info").textContent = "Logged in as: " + username;
+    }
+
+    function logout() {
+      localStorage.removeItem("scheduloUsername");
+      localStorage.removeItem("scheduloPassword");
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    }
+
+    function addCourseRow(bodyId) {
+      const tableBody = document.getElementById(bodyId);
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="text" placeholder="Course name"></td>
+        <td><input type="text" placeholder="Slot"></td>
+        <td><input type="text" placeholder="Staff name"></td>
+        <td><input type="number" placeholder="Credits" onchange="updateCreditSummary()"></td>
+        <td>
+          <select>
+            <option value="">Select Day</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+          </select>
+        </td>
+        <td>
+          <select class="time-select">
+            <option value="">Select Time</option>
+            <option>8AM-10AM</option>
+            <option>10AM-12PM</option>
+            <option>1PM-3PM</option>
+            <option>3PM-5PM</option>
+            <option>8AM-9AM</option>
+            <option>9AM-10AM</option>
+            <option>10AM-11AM</option>
+            <option>11AM-12PM</option>
+            <option>1PM-2PM</option>
+            <option>2PM-3PM</option>
+            <option>3PM-4PM</option>
+            <option>4PM-5PM</option>
+          </select>
+        </td>
+        <td>
+          <select>
+            <option value="">Select Day</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+          </select>
+        </td>
+        <td>
+          <select class="time-select">
+            <option value="">Select Time</option>
+            <option>8AM-10AM</option>
+            <option>10AM-12PM</option>
+            <option>1PM-3PM</option>
+            <option>3PM-5PM</option>
+            <option>8AM-9AM</option>
+            <option>9AM-10AM</option>
+            <option>10AM-11AM</option>
+            <option>11AM-12PM</option>
+            <option>1PM-2PM</option>
+            <option>2PM-3PM</option>
+            <option>3PM-4PM</option>
+            <option>4PM-5PM</option>
+          </select>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    }
+
+    function updateCreditSummary() {
+      const creditSummary = {
+        "Professional Core": 0,
+        "Professional Elective": 0,
+        "Open Elective": 0,
+        "Humanities and Science": 0,
+        "Employability Enhancement Courses": 0,
+        "Basic Science": 0,
+        "Engineering Science": 0,
+        "Total": 0
+      };
+
+      const sections = [
+        { id: "core-body", category: "Professional Core" },
+        { id: "pro-elective-body", category: "Professional Elective" },
+        { id: "open-elective-body", category: "Open Elective" },
+        { id: "humanities-body", category: "Humanities and Science" },
+        { id: "employability-body", category: "Employability Enhancement Courses" },
+        { id: "basic-science-body", category: "Basic Science" },
+        { id: "engineering-science-body", category: "Engineering Science" }
+      ];
+
+      sections.forEach(section => {
+        const rows = document.querySelectorAll(`#${section.id} tr`);
+        rows.forEach(row => {
+          const creditInput = row.querySelector("input[type='number']");
+          const creditValue = parseInt(creditInput.value) || 0;
+          creditSummary[section.category] += creditValue;
+          creditSummary["Total"] += creditValue;
+        });
+      });
+
+      // Update the display
+      document.getElementById("core-credits").textContent = creditSummary["Professional Core"];
+      document.getElementById("pro-elective-credits").textContent = creditSummary["Professional Elective"];
+      document.getElementById("open-elective-credits").textContent = creditSummary["Open Elective"];
+      document.getElementById("humanities-credits").textContent = creditSummary["Humanities and Science"];
+      document.getElementById("employability-credits").textContent = creditSummary["Employability Enhancement Courses"];
+      document.getElementById("basic-science-credits").textContent = creditSummary["Basic Science"];
+      document.getElementById("engineering-science-credits").textContent = creditSummary["Engineering Science"];
+      document.getElementById("total-credits").textContent = creditSummary["Total"];
+    }
+
+    function createTimetable() {
+      // Get all course sections
+      const sections = [
+        "core-body", "pro-elective-body", "open-elective-body", 
+        "humanities-body", "employability-body", 
+        "basic-science-body", "engineering-science-body"
+      ];
+      
+      let courses = [];
+      const creditSummary = {
+        "Professional Core": 0,
+        "Professional Elective": 0,
+        "Open Elective": 0,
+        "Humanities and Science": 0,
+        "Employability Enhancement Courses": 0,
+        "Basic Science": 0,
+        "Engineering Science": 0,
+        "Total": 0
+      };
+
+      // Collect all courses and calculate credits
+      sections.forEach(section => {
+        const rows = document.querySelectorAll(`#${section} tr`);
+        rows.forEach(row => {
+          const inputs = row.querySelectorAll("input");
+          const selects = row.querySelectorAll("select");
+          const course = {
+            name: inputs[0].value.trim(),
+            slot: inputs[1].value.trim(),
+            staff: inputs[2].value.trim(),
+            credit: parseInt(inputs[3].value) || 0,
+            day1: selects[0].value.trim(),
+            time1: selects[1].value.trim(),
+            day2: selects[2].value.trim(),
+            time2: selects[3].value.trim(),
+            category: section.replace('-body', '').replace(/-/g, ' ')
+          };
+          
+          // Capitalize first letters of category
+          course.category = course.category.split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          
+          if (course.name && course.day1 && course.time1) {
+            courses.push(course);
+            // Calculate credits for all courses (including potential conflicts)
+            if (creditSummary.hasOwnProperty(course.category)) {
+              creditSummary[course.category] += course.credit;
+              creditSummary["Total"] += course.credit;
+            }
+          }
+        });
+      });
+      // Map time inputs to table time slots
+      const timeMap = {
+        "8AM-10AM": "8-10", "9AM-11AM": "8-10",
+        "10AM-12PM": "10-12", "11AM-1PM": "10-12",
+        "1PM-3PM": "1-3", "2PM-4PM": "1-3",
+        "3PM-5PM": "3-5", "2PM-5PM": "3-5"
+      };
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+      // Track conflicts between entire courses
+      const courseConflicts = [];
+
+      // First pass to identify all time slots and their courses
+      const timeSlotMap = {};
+      courses.forEach((course, courseIndex) => {
+        // Normalize time strings
+        const normTime1 = course.time1.replace(/\s/g, '').toUpperCase();
+        const normTime2 = course.time2.replace(/\s/g, '').toUpperCase();
+        
+        // Get time slots
+        const t1key = timeMap[normTime1] || "";
+        const t2key = timeMap[normTime2] || "";
+        
+        // Capitalize day names
+        const d1 = capitalize(course.day1);
+        const d2 = capitalize(course.day2);
+
+        // Track which courses use which time slots
+        if (days.includes(d1) && t1key) {
+          const slotKey = `${d1}-${t1key}`;
+          if (!timeSlotMap[slotKey]) timeSlotMap[slotKey] = [];
+          timeSlotMap[slotKey].push(courseIndex);
+        }
+        
+        if (days.includes(d2) && t2key) {
+          const slotKey = `${d2}-${t2key}`;
+          if (!timeSlotMap[slotKey]) timeSlotMap[slotKey] = [];
+          timeSlotMap[slotKey].push(courseIndex);
+        }
+      });
+
+      // Find courses that share any time slot with another course
+      const conflictingCourses = new Set();
+      Object.values(timeSlotMap).forEach(slotCourses => {
+        if (slotCourses.length > 1) {
+          slotCourses.forEach(courseIndex => {
+            conflictingCourses.add(courseIndex);
+          });
+        }
+      });
+
+      // Group conflicting courses together
+      const conflictGroups = [];
+      Array.from(conflictingCourses).forEach(courseIndex => {
+        const course = courses[courseIndex];
+        let addedToGroup = false;
+        
+        // Check if this course conflicts with any existing group
+        for (const group of conflictGroups) {
+          for (const groupCourseIndex of group) {
+            const groupCourse = courses[groupCourseIndex];
+            // Check if these courses share any time slot
+            if (coursesConflict(course, groupCourse, timeMap, days)) {
+              group.add(courseIndex);
+              addedToGroup = true;
+              break;
+            }
+          }
+          if (addedToGroup) break;
+        }
+        
+        // If not added to any group, create new group
+        if (!addedToGroup) {
+          conflictGroups.push(new Set([courseIndex]));
+        }
+      });
+
+      // Create conflict resolution data
+      conflictGroups.forEach(group => {
+        const groupArray = Array.from(group);
+        if (groupArray.length > 1) {
+          const conflictOptions = groupArray.map(courseIndex => {
+            const course = courses[courseIndex];
+            return {
+              courseIndex,
+              display: `${course.name} (${course.category}) - ${course.day1} ${course.time1}, ${course.day2} ${course.time2}`
+            };
+          });
+          courseConflicts.push(conflictOptions);
+        }
+      });
+
+      // If there are conflicts, show dialog to resolve them
+      if (courseConflicts.length > 0) {
+        resolveCourseConflicts(courseConflicts, courses, creditSummary, () => {
+          // After resolving conflicts, rebuild the timetable with updated credits
+          buildFinalTimetable(courses, timeMap, days, creditSummary);
+        });
+      } else {
+        // No conflicts, just build the timetable with the calculated credits
+        buildFinalTimetable(courses, timeMap, days, creditSummary);
+      }
+    }
+
+    function coursesConflict(course1, course2, timeMap, days) {
+      // Check if two courses share any time slot
+      
+      // Normalize course1 times
+      const c1t1 = timeMap[course1.time1.replace(/\s/g, '').toUpperCase()] || "";
+      const c1t2 = timeMap[course1.time2.replace(/\s/g, '').toUpperCase()] || "";
+      const c1d1 = capitalize(course1.day1);
+      const c1d2 = capitalize(course1.day2);
+      
+      // Normalize course2 times
+      const c2t1 = timeMap[course2.time1.replace(/\s/g, '').toUpperCase()] || "";
+      const c2t2 = timeMap[course2.time2.replace(/\s/g, '').toUpperCase()] || "";
+      const c2d1 = capitalize(course2.day1);
+      const c2d2 = capitalize(course2.day2);
+      
+      // Check all possible overlaps
+      return (days.includes(c1d1) && days.includes(c2d1) && c1t1 && c2t1 && c1d1 === c2d1 && c1t1 === c2t1) ||
+             (days.includes(c1d1) && days.includes(c2d2) && c1t1 && c2t2 && c1d1 === c2d2 && c1t1 === c2t2) ||
+             (days.includes(c1d2) && days.includes(c2d1) && c1t2 && c2t1 && c1d2 === c2d1 && c1t2 === c2t1) ||
+             (days.includes(c1d2) && days.includes(c2d2) && c1t2 && c2t2 && c1d2 === c2d2 && c1t2 === c2t2);
+    }
+
+    function resolveCourseConflicts(conflictGroups, courses, creditSummary, callback) {
+      if (conflictGroups.length === 0) {
+        callback();
+        return;
+      }
+      
+      const currentGroup = conflictGroups[0];
+      const remainingGroups = conflictGroups.slice(1);
+      
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      
+      const dialog = document.createElement('div');
+      dialog.className = 'conflict-dialog';
+      
+      let dialogHTML = `
+        <h3>Course Conflict Detected</h3>
+        <p>The following courses have overlapping time slots. Please choose which one to keep:</p>
+        <div id="conflict-options"></div>
+      `;
+      
+      dialog.innerHTML = dialogHTML;
+      const optionsDiv = dialog.querySelector('#conflict-options');
+      
+      currentGroup.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'conflict-option';
+        optionDiv.setAttribute('data-index', option.courseIndex);
+        optionDiv.textContent = option.display;
+        optionsDiv.appendChild(optionDiv);
+      });
+      
+      document.body.appendChild(overlay);
+      document.body.appendChild(dialog);
+      
+      // Handle conflict resolution
+      dialog.addEventListener('click', function(e) {
+        const option = e.target.closest('.conflict-option');
+        if (option) {
+          const chosenIndex = parseInt(option.getAttribute('data-index'));
+          
+          // Remove all conflicting courses except the chosen one
+          currentGroup.forEach(opt => {
+            if (opt.courseIndex !== chosenIndex) {
+              // Mark course for removal by setting its name to empty
+              const courseToRemove = courses[opt.courseIndex];
+              // Subtract credits from the summary for the removed course
+              if (creditSummary.hasOwnProperty(courseToRemove.category)) {
+                creditSummary[courseToRemove.category] -= courseToRemove.credit;
+                creditSummary["Total"] -= courseToRemove.credit;
+              }
+              courses[opt.courseIndex].name = "";
+            }
+          });
+          
+          // Close dialog
+          document.body.removeChild(overlay);
+          document.body.removeChild(dialog);
+          
+          // Process remaining conflicts
+          resolveCourseConflicts(remainingGroups, courses, creditSummary, callback);
+        }
+      });
+    }
+
+    function buildFinalTimetable(courses, timeMap, days, creditSummary) {
+      // Filter out removed courses (those with empty names)
+      const validCourses = courses.filter(course => course.name);
+      
+      const timetable = {
+        "8-10": {}, "10-12": {}, "1-3": {}, "3-5": {}
+      };
+
+      validCourses.forEach(course => {
+        const value = `${course.name}<br>${course.staff}<br>${course.slot}<br>(${course.category})`;
+
+        // Get time slots
+        const t1key = timeMap[course.time1.replace(/\s/g, '').toUpperCase()] || "";
+        const t2key = timeMap[course.time2.replace(/\s/g, '').toUpperCase()] || "";
+
+        // Capitalize day names
+        const d1 = capitalize(course.day1);
+        const d2 = capitalize(course.day2);
+
+        // Add to timetable
+        if (days.includes(d1) && t1key) {
+          timetable[t1key][d1] = value;
+        }
+        
+        if (days.includes(d2) && t2key) {
+          timetable[t2key][d2] = value;
+        }
+      });
+
+      // Render the final timetable
+      renderTimetable(timetable, days, creditSummary);
+    }
+
+    function renderTimetable(timetable, days, creditSummary) {
+      // Render the timetable
+      const output = document.getElementById("timetable-output");
+      output.innerHTML = "<h2>📅 Weekly Timetable</h2>";
+      let html = `<table><thead><tr><th>Time</th>`;
+      days.forEach(day => html += `<th>${day}</th>`);
+      html += "</tr></thead><tbody>";
+
+      Object.keys(timetable).forEach(slot => {
+        html += `<tr><td><b>${slot}</b></td>`;
+        days.forEach(day => {
+          html += `<td>${timetable[slot][day] || ""}</td>`;
+        });
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      output.innerHTML = html;
+
+      // Update the credit summary display
+      updateCreditSummary();
+
+      alert("Timetable generated successfully!");
+    }
+
+    function capitalize(word) {
+      if (!word) return "";
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }
+
+    // Initialize credit summary on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateCreditSummary();
+    });
+  </script>
+</body>
+</html>
