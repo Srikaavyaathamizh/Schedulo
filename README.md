@@ -50,5 +50,29 @@ Frontend: HTML, CSS, JavaScript
 
 7.Optionally, save timetable or edit courses
 
+## Output
+
+## Login
+<img width="1912" height="912" alt="Screenshot 2025-08-18 142420" src="https://github.com/user-attachments/assets/1641c2cc-47b4-4f99-8ec1-55338e5f0f3d" />
+
+<img width="1897" height="901" alt="Screenshot 2025-08-18 142508" src="https://github.com/user-attachments/assets/df821ec6-34d7-47ac-9858-1dd34d7dc0a1" />
+
+<img width="1538" height="846" alt="Screenshot 2025-08-18 143010" src="https://github.com/user-attachments/assets/cf09fb8f-b356-412b-8d6e-0a9d30ca6b2b" />
+
+<img width="1773" height="859" alt="Screenshot 2025-08-18 143023" src="https://github.com/user-attachments/assets/4c843bad-6e19-4820-a110-45701a86c5b1" />
+
+<img width="1579" height="820" alt="Screenshot 2025-08-18 143038" src="https://github.com/user-attachments/assets/6695d5de-e382-4d84-8a6e-3ffcab6d340f" />
+
+## Total Credit Enrolled 
+
+<img width="1277" height="363" alt="Screenshot 2025-08-18 143108" src="https://github.com/user-attachments/assets/a534f255-2157-45be-8911-6f63ed7eb09f" />
+
+## Create Timetable
+
+<img width="1320" height="816" alt="Screenshot 2025-08-18 143118" src="https://github.com/user-attachments/assets/f6e39c44-df1f-4c69-b110-d3e2f36570b6" />
+
+
+
+
 ## Result
 SCHEDULO generates a structured, easy-to-read weekly timetable based on user-input course details, simplifying course planning and ensuring no conflicts in day and time slots.
